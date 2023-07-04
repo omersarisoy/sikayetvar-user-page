@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <GlobalStyle/>
       <body >
-        {pathName !== '/login' && <SideBar/>  }
+        {pathName !== '/' && <SideBar/>  }
         {children}
         </body>
     </html>

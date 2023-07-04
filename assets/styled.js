@@ -1,5 +1,6 @@
 'use client'
 import { Button, TextField } from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
 import Link from "next/link";
 import { styled } from "styled-components";
 
@@ -199,8 +200,28 @@ export const Hero = styled.div`
     top: 70px;
     padding: 20px;
 `
+export const StudentHero = styled.div`
+    width: calc(100% - 270px);
+    float: right;
+    position: relative;
+    top: 70px;
+    padding: 20px;
+    background-color: #F8F8F8;
+`
 
 export const StudentTitle = styled.div`
-    padding: 30px;
 
+
+`
+
+export const CustomTable = styled(MaterialReactTable)`
+    .searchButton {
+        position: absolute;
+        right: 203px;
+    }
+
+    .createButton {
+        position: absolute;
+        right: 30px;
+    }
 `

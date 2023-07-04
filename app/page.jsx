@@ -1,66 +1,53 @@
 'use client'
-import { Card, Header, Hero } from '@/assets/styled'
-import React from 'react'
-import {
-  BellIcon,
-  SpeakerIcon, 
-  UsdSquare, 
-  Bookmark, 
-  GraduationCap,
-  Users
-} from '@/assets/icon'
+import { CustomTextField, LoginPage, SignInButton } from "@/assets/styled";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const Home = () => {
+export default function Login() {
+  const [login, setLogin] = useState(false)
+  const getEmail = localStorage.getItem('myEmail')
+  const getPassword = localStorage.getItem('myPassword')
+  const router = useRouter()
 
-  const cardInfo = [
-    {
-      id: 1,
-      name: "Students",
-      icon: <GraduationCap />,
-      value: 243,
-      background: "#F0F9FF"
-    },
-    {
-      id: 2,
-      name: "Course",
-      icon: <Bookmark />,
-      value: 13,
-      background: "#FEF6FB"
-    },
-    {
-      id: 3,
-      name: "Payments",
-      icon: <UsdSquare />,
-      value: new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(556.000),
-      background: "#FEFBEC"
-    },
-    {
-      id: 4,
-      name: "Users",
-      icon: <Users />,
-      value: 3,
-      background: "linear-gradient(to right, #FEAF00 , #F8D442)",
-      color: "#FFFFFF"
+
+
+  const handleSubmit = () => {
+    if (getEmail == 'omersarisoy1993@gmail.com' && getPassword == '555761ts') {
+        setLogin(getEmail == 'omersarisoy1993@gmail.com' && getPassword == '555761ts')
+        // redirect('/home')
+        router.push('/home')
     }
-  ]
-
+  }
   return (
-    <div>
-      <Header>
-        <SpeakerIcon />
-        <BellIcon />
-      </Header>
-      <Hero>
-        {cardInfo.map((card) => ( 
-          <Card $background={card.background} $color={card.color} key={card.id}>
-            {card.icon}
-            <p>{card.name}</p>
-            <h1>{card.value}</h1>
-          </Card>
-        ))}
-      </Hero>
-    </div>
+    <LoginPage>
+      <div className="loginWrapper">
+        <h1>MANAGE COURSES</h1>
+        <div className="sign-in">
+          <h2>SIGN IN</h2>
+          <p>Enter your credentials to access your account</p>
+        </div>
+        <form className="email-form" onSubmit={handleSubmit}>
+          <span>Email</span>
+          <CustomTextField 
+            id="outlined-basic" 
+            label="Enter Your Email" 
+            variant="outlined" 
+            onChange={(e) => localStorage.setItem("myEmail", e.target.value)}
+          />
+          <span>Password</span>
+          <CustomTextField 
+            id="outlined-basic" 
+            label="Enter Your Password" 
+            variant="outlined" 
+            onChange={(e) => localStorage.setItem("myPassword", e.target.value)}
+
+
+          />
+          <SignInButton variant="contained" type="submit" >SIGN IN</SignInButton>
+          <p className="forgot">Forgot your password? <a>Reset Password</a> </p>
+        </form>
+      </div>
+    </LoginPage>
   )
 }
-
-export default Home
