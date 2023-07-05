@@ -10,42 +10,40 @@ import {
   Users
 } from '@/assets/icon'
 
+const cardInfo = [
+  {
+    id: 1,
+    name: "Students",
+    icon: <GraduationCap />,
+    value: 243,
+    background: "#F0F9FF"
+  },
+  {
+    id: 2,
+    name: "Course",
+    icon: <Bookmark />,
+    value: 13,
+    background: "#FEF6FB"
+  },
+  {
+    id: 3,
+    name: "Payments",
+    icon: <UsdSquare />,
+    value: new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(556.000),
+    background: "#FEFBEC"
+  },
+  {
+    id: 4,
+    name: "Users",
+    icon: <Users />,
+    value: 3,
+    background: "linear-gradient(to right, #FEAF00 , #F8D442)",
+    color: "#FFFFFF"
+  }
+]
 const Home = () => {
-
-  const cardInfo = [
-    {
-      id: 1,
-      name: "Students",
-      icon: <GraduationCap />,
-      value: 243,
-      background: "#F0F9FF"
-    },
-    {
-      id: 2,
-      name: "Course",
-      icon: <Bookmark />,
-      value: 13,
-      background: "#FEF6FB"
-    },
-    {
-      id: 3,
-      name: "Payments",
-      icon: <UsdSquare />,
-      value: new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(556.000),
-      background: "#FEFBEC"
-    },
-    {
-      id: 4,
-      name: "Users",
-      icon: <Users />,
-      value: 3,
-      background: "linear-gradient(to right, #FEAF00 , #F8D442)",
-      color: "#FFFFFF"
-    }
-  ]
-
   return (
-    <div>
+    <>
       <Header>
         <SpeakerIcon />
         <BellIcon />
@@ -59,7 +57,7 @@ const Home = () => {
           </Card>
         ))}
       </Hero>
-    </div>
+    </>
   )
 }
 

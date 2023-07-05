@@ -4,6 +4,26 @@ import { MaterialReactTable } from "material-react-table";
 import Link from "next/link";
 import { styled } from "styled-components";
 
+const size = {
+    mobileS: '320px',
+    mobileM: '375px',
+    mobileL: '425px',
+    tablet: '768px',
+    laptop: '1024px',
+    laptopL: '1440px',
+    desktop: '2560px'
+  }
+const device = {
+    mobileS: `(max-width: ${size.mobileS})`,
+    mobileM: `(max-width: ${size.mobileM})`,
+    mobileL: `(max-width: ${size.mobileL})`,
+    tablet: `(max-width: ${size.tablet})`,
+    laptop: `(max-width: ${size.laptop})`,
+    laptopL: `(max-width: ${size.laptopL})`,
+    desktop: `(max-width: ${size.desktop})`,
+    desktopL: `(max-width: ${size.desktop})`
+  };
+
 export const LoginPage = styled.div`
     height: 100vh;
     width: 100%;
@@ -22,7 +42,6 @@ export const LoginPage = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-between;
         h1 {
             border-left: 6px solid #F8D442;
             padding-left: 10px;
@@ -30,6 +49,7 @@ export const LoginPage = styled.div`
             line-height: 39px;
         }
         .sign-in{
+            margin-bottom: 40px;
             h2 {
                 text-align: center;
             }
@@ -46,6 +66,11 @@ export const LoginPage = styled.div`
                     text-decoration: underline;
                 }
             }
+        }
+        @media ${device.mobileL} { 
+           h1 {
+            font-size: 28px;
+           }
         }
     }
 `
@@ -138,18 +163,21 @@ export const Sidebar = styled.div`
         gap: 20px;
         align-items: center;
     }
+    @media ${device.tablet} { 
+          display: none;
+        }
 `
 
 export const CustomLink =  styled(Link)`
     text-decoration: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     gap: 12px;
-    height: 41px;
     transition: all ease .5s;
     border-radius: 4px;
     color: #000000;
+    padding: 12px 50px;
 
     &:hover, :focus {
         background-color: #FEAF00;
@@ -170,14 +198,14 @@ export const Header = styled.div`
 
 export const Card = styled.div`
     background: ${props => props.$background};   
-    width: 100%;
-    height: 157px;
+    width: 300px;
+    height: 160px;
     border-radius: 8px;
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
+
     p {
         color: ${props =>props.$color || '6C6C6C'}
     }
@@ -193,35 +221,89 @@ export const Card = styled.div`
 export const Hero = styled.div`
     width: calc(100% - 270px);
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    gap: 30px;
     float: right;
     position: relative;
     top: 70px;
-    padding: 20px;
+    padding: 30px;
+    flex-wrap: wrap;
+    @media ${device.tablet} { 
+        width: 100%;
+    }
 `
 export const StudentHero = styled.div`
     width: calc(100% - 270px);
+    height: calc(100vh - 70px);
     float: right;
     position: relative;
     top: 70px;
-    padding: 20px;
+    padding: 0 30px;
     background-color: #F8F8F8;
-`
 
-export const StudentTitle = styled.div`
+    .MuiPaper-root {
+        box-shadow: none;
 
+        p {
+            font-size: 14px;
+            color: #9FA2B4;
+        }
 
-`
+        >div:nth-child(odd) {
+            background-color: #F8F8F8;
+        }
+        .MuiTableContainer-root table thead tr {
+            box-shadow: none;
+        }
+        
+        >div:nth-child(1) {
+            >.Mui-ToolbarDropZone {
+                display: none;
+            }
+            >.MuiBox-root {
+                position: relative;
+                display: flex;
+                align-items: center;
 
-export const CustomTable = styled(MaterialReactTable)`
-    .searchButton {
-        position: absolute;
-        right: 203px;
+                button {
+                    position: absolute;
+                    right: 0;
+                    background-color: #FEAF00;
+                    box-shadow: none;
+                    border-radius: 4px;
+                    padding: 10px 15px;
+
+                }
+                >div {
+                    position: absolute;
+                    right: 200px;
+
+                    .MuiInputBase-root {
+                        background-color: #FFFFFF;
+                        border-radius: 8px;
+                        border: 1px solid #E5E5E5;
+                    }
+                    input {
+                        padding: 10px;
+                        font-size: 14px;
+                        color: #C4C4C4;
+                        font-family: 'Montserrat', sans-serif;
+                    }
+
+                    fieldset {
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+    @media ${device.tablet} { 
+        width: 100%;
+    }
+    @media ${device.laptop} { 
+        h2 {
+            display: none;
+        }
     }
 
-    .createButton {
-        position: absolute;
-        right: 30px;
-    }
+    
 `

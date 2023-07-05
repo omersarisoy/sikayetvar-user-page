@@ -1,299 +1,335 @@
-'use client'
-import React, { useCallback, useMemo, useState } from 'react';
-import { MaterialReactTable } from 'material-react-table';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  MenuItem,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
-import { data, states } from '../../components/makeData';
-import { CustomTable, Header, StudentHero } from '@/assets/styled';
-import { BellIcon, SpeakerIcon } from '@/assets/icon';
-
-const EdiTable = () => {
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState(() => data);
-  const [validationErrors, setValidationErrors] = useState({});
-
-  const handleCreateNewRow = (values) => {
-    tableData.push(values);
-    setTableData([...tableData]);
-  };
-
-  const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
-    if (!Object.keys(validationErrors).length) {
-      tableData[row.index] = values;
-      //send/receive api updates here, then refetch or update local table data for re-render
-      setTableData([...tableData]);
-      exitEditingMode(); //required to exit editing mode and close modal
-    }
-  };
-
-  const handleCancelRowEdits = () => {
-    setValidationErrors({});
-  };
-
-  const handleDeleteRow = useCallback(
-    (row) => {
-      if (
-        !confirm(`Are you sure you want to delete ${row.getValue('firstName')}`)
-      ) {
-        return;
-      }
-      //send api delete request here, then refetch or update local table data for re-render
-      tableData.splice(row.index, 1);
-      setTableData([...tableData]);
-    },
-    [tableData],
-  );
-
-  const getCommonEditTextFieldProps = useCallback(
-    (cell) => {
-      return {
-        error: !!validationErrors[cell.id],
-        helperText: validationErrors[cell.id],
-        onBlur: (event) => {
-          const isValid =
-            cell.column.id === 'email'
-              ? validateEmail(event.target.value)
-              : cell.column.id === 'age'
-              ? validateAge(+event.target.value)
-              : validateRequired(event.target.value);
-          if (!isValid) {
-            //set validation error for cell if invalid
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: `${cell.column.columnDef.header} is required`,
-            });
-          } else {
-            //remove validation error for cell if valid
-            delete validationErrors[cell.id];
-            setValidationErrors({
-              ...validationErrors,
-            });
-          }
-        },
-      };
-    },
-    [validationErrors],
-  );
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-        enableColumnOrdering: false,
-        enableEditing: false, //disable editing on this column
-        enableSorting: false,
-        size: 80,
-      },
-      {
-        accessorKey: 'firstName',
-        header: 'First Name',
-        size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
-      },
-      {
-        accessorKey: 'lastName',
-        header: 'Last Name',
-        size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
-      },
-      {
-        accessorKey: 'email',
-        header: 'Email',
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-          type: 'email',
-        }),
-      },
-      {
-        accessorKey: 'age',
-        header: 'Age',
-        size: 80,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-          type: 'number',
-        }),
-      },
-      {
-        accessorKey: 'state',
-        header: 'State',
-        muiTableBodyCellEditTextFieldProps: {
-          select: true, //change to select for a dropdown
-          children: states.map((state) => (
-            <MenuItem key={state} value={state}>
-              {state}
-            </MenuItem>
-          )),
-        },
-      },
-    ],
-    [getCommonEditTextFieldProps],
-  );
-
-  return (
-    <>
-      <Header>
-        <SpeakerIcon />
-        <BellIcon />
-      </Header>
-      <StudentHero>
-        <CustomTable
-          displayColumnDefOptions={{
-            'mrt-row-actions': {muiTableHeadCellProps: {align: 'center',},size: 120,},
-          }}
-          columns={columns}
-          data={tableData}
-          editingMode="modal" //default
-          enableEditing
-          onEditingRowSave={handleSaveRowEdits}
-          onEditingRowCancel={handleCancelRowEdits}
-          enableFullScreenToggle={false}
-          enableDensityToggle={false}
-          enableMultiSort={false}
-          enableColumnActions={false}
-          enableHiding={false}
-          enableColumnFilters={false}
-          enableSorting={false}
-          positionActionsColumn="last"
-          muiSearchTextFieldProps={{
-            className : "searchButton",
-            variant: 'outlined',
-            placeholder: 'Search',
-            label: 'Search',
-            InputLabelProps: {
-              shrink: true
+"use client";
+ import { BellIcon, Magnify, Pencil, SpeakerIcon, Trash } from "@/assets/icon";
+ import { Header, StudentHero } from "@/assets/styled";
+ import {
+   Box,
+   Button,
+   Dialog,
+   DialogActions,
+   DialogContent,
+   DialogTitle,
+   IconButton,
+   InputAdornment,
+   Stack,
+   TextField,
+ } from "@mui/material";
+ import { useCallback, useEffect, useMemo, useState } from "react";
+import { MaterialReactTable } from "material-react-table";
+ 
+ const EdiTable = () => {
+   const [createModalOpen, setCreateModalOpen] = useState(false);
+   const [tableData, setTableData] = useState([]);
+   const [validationErrors, setValidationErrors] = useState({});
+ 
+   const handleCreateNewRow = (values) => {
+     tableData.push(values);
+     setTableData([...tableData]);
+   };
+ 
+   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
+     if (!Object.keys(validationErrors).length) {
+       tableData[row.index] = values;
+       setTableData([...tableData]);
+       exitEditingMode(); 
+     }
+   };
+ 
+   const handleCancelRowEdits = () => {
+     setValidationErrors({});
+   };
+ 
+   const handleDeleteRow = useCallback(
+     (row) => {
+       if (!confirm(`Are you sure you want to delete ${row.getValue("Name")}`)) {
+         return;
+       }
+       tableData.splice(row.index, 1);
+       setTableData([...tableData]);
+     },
+     [tableData],
+   );
+ 
+   useEffect(() => {
+     const fetchTableData = async () => {
+       const response = await fetch("https://dummyjson.com/users");
+       const data = await response.json();
+       if (data) {
+         setTableData(data.users);
+       }
+     };
+     fetchTableData();
+   }, []);
+ 
+   const getCommonEditTextFieldProps = useCallback(
+     (cell) => {
+       return {
+         error: !!validationErrors[cell.id],
+         helperText: validationErrors[cell.id],
+         onBlur: (event) => {
+           const isValid =
+             cell.column.id === "email"
+               ? validateEmail(event.target.value)
+               : cell.column.id === "age"
+               ? validateAge(+event.target.value)
+               : validateRequired(event.target.value);
+           if (!isValid) {
+             setValidationErrors({
+               ...validationErrors,
+               [cell.id]: `${cell.column.columnDef.header} is required`,
+             });
+           } else {
+             delete validationErrors[cell.id];
+             setValidationErrors({
+               ...validationErrors,
+             });
+           }
+         },
+       };
+     },
+     [validationErrors],
+   );
+ 
+   const columns = useMemo(
+     () => [
+       {
+         accessorKey: "image",
+         columns: [
+           {
+             header: " ",
+             Cell: ({ renderedCellValue, row }) => (
+              <>
+                 <img
+                   alt="avatar"
+                   height={55}
+                   src={row.original.image}
+                   loading="lazy"
+                 />
+                 <span>{renderedCellValue}</span>
+               </>
+             ),
+           },
+         ],
+       },
+       {
+         accessorKey: "Name",
+         size: 140,
+         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+           ...getCommonEditTextFieldProps(cell),
+         }),
+         columns: [
+           {
+             accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+             header: "Name",
+             muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+               ...getCommonEditTextFieldProps(cell),
+             }),
+           },
+         ],
+       },
+ 
+       {
+         accessorKey: "email",
+         header: "Email",
+         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+           ...getCommonEditTextFieldProps(cell),
+           type: "email",
+         }),
+       },
+       {
+         accessorKey: "phone",
+         header: "Phone",
+         size: 170,
+         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+           ...getCommonEditTextFieldProps(cell),
+         }),
+       },
+       {
+         accessorKey: "domain",
+         header: "Website",
+         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+           ...getCommonEditTextFieldProps(cell),
+         }),
+       },
+       {
+         accessorKey: "company",
+         columns: [
+           {
+             accessorFn: (row) => `${row.company.name}`,
+             header: "Company Name",
+             muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+               ...getCommonEditTextFieldProps(cell),
+             }),
+           },
+         ],
+       },
+     ],
+     [getCommonEditTextFieldProps],
+   );
+ 
+   return (
+     <>
+       <Header>
+         <SpeakerIcon />
+         <BellIcon />
+       </Header>
+       <StudentHero>
+         <MaterialReactTable
+           displayColumnDefOptions={{
+             "mrt-row-actions": { muiTableHeadCellProps: { align: "center" }, size: 120 },
+           }}
+           columns={columns}
+           data={tableData}
+           editingMode="modal"
+           enableEditing
+           onEditingRowSave={handleSaveRowEdits}
+           onEditingRowCancel={handleCancelRowEdits}
+           enableFullScreenToggle={false}
+           enableDensityToggle={false}
+           enableMultiSort={false}
+           enableColumnActions={false}
+           enableHiding={false}
+           enableColumnFilters={false}
+           enableSorting={false}
+           positionActionsColumn="last"
+           muiTableBodyRowProps={{
+            sx: {
+              height: '85px',
+              borderRadius: "20px",
+              backgroundColor: '#FFFFFF',
             }
           }}
-          initialState={{
-            pagination: {
-              pageSize: 6,
-              pageIndex: 0
-            }, 
-            showGlobalFilter: true
-          }} 
-          muiTablePaginationProps={{
-            rowsPerPageOptions: [1,2,3,4,5,6,10,15,20],
-            showFirstButton: true,
-            showLastButton: false,
-            SelectProps: {
-              native: true
-            },
-            labelRowsPerPage: 'Rows per page'
+          muiTableHeadCellProps={{
+            sx:({
+              background: '#F8F8F8',
+              color: "#ACACAC",
+              fontSize: 12,
+              fontFamily: 'Montserrat',
+            })
           }}
-          renderRowActions={({ row, table }) => (
-            <Box sx={{ display: 'flex', gap: '1rem' }}>
-            <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => table.setEditingRow(row)}>
-              <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip arrow placement="right" title="Delete">
-                <IconButton color="error" onClick={() => handleDeleteRow(row)}>
-                <Delete />
+           muiSearchTextFieldProps={{
+             className: "searchButton",
+             InputProps:{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <Magnify />
+                </InputAdornment>
+              ),
+            },
+            variant:"outlined",
+            placeholder: "Search...",
+           }}
+           initialState={{
+             pagination: {
+               pageSize: 6,
+               pageIndex: 0,
+             },
+             showGlobalFilter: true,
+           }}
+           muiTablePaginationProps={{
+             rowsPerPageOptions: [ 5, 6, 10, 15, 20],
+             showFirstButton: true,
+             showLastButton: false,
+             SelectProps: {
+               native: true,
+             },
+             labelRowsPerPage: "Rows per page",
+           }}
+           renderRowActions={({ row, table }) => (
+             <Box sx={{ display: "flex", gap: "1rem" }}>
+                <IconButton onClick={() => table.setEditingRow(row)}>
+                  <Pencil />
                 </IconButton>
-            </Tooltip>
-            </Box>
-          )}
-          renderTopToolbarCustomActions={() => {
-            return (<>
-            <h2>Students List</h2>
-            <Button
-              color="secondary"
-              onClick={() => setCreateModalOpen(true)}
-              variant="contained"
-              className='createButton'
-              >
-              ADD NEW STUDENT
-            </Button>
-            </>) 
-          }} 
-        />
-        <CreateNewAccountModal
-        columns={columns}
-        open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={handleCreateNewRow}
-        />
-      </StudentHero>
-    </>
-  );
-};
-
-//example of creating a mui dialog modal for creating new rows
-export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
-  const [values, setValues] = useState(() =>
-    columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ''] = '';
-      return acc;
-    }, {}),
-  );
-
-  const handleSubmit = () => {
-    //put your validation logic here
-    onSubmit(values);
-    onClose();
-  };
-
-  return (
-    <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Account</DialogTitle>
-      <DialogContent>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <Stack
-            sx={{
-              width: '100%',
-              minWidth: { xs: '300px', sm: '360px', md: '400px' },
-              gap: '1.5rem',
-            }}
-          >
-            {columns.map((column) => (
-              <TextField
-                key={column.accessorKey}
-                label={column.header}
-                name={column.accessorKey}
-                onChange={(e) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
-              />
-            ))}
-          </Stack>
-        </form>
-      </DialogContent>
-      <DialogActions sx={{ p: '1.25rem' }}>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New Account
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-const validateAge = (age) => age >= 18 && age <= 50;
-
-export default EdiTable;
+                <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+                  <Trash />
+                </IconButton>
+             </Box>
+           )}
+           renderTopToolbarCustomActions={() => {
+             return (
+               <>
+                 <h2>Students List</h2>
+                 <Button
+                   color="primary"
+                   onClick={() => setCreateModalOpen(true)}
+                   variant="contained"
+                   className="createButton"
+                 >
+                   ADD NEW STUDENT
+                 </Button>
+               </>
+             );
+           }}
+         />
+         <CreateNewAccountModal
+           columns={columns}
+           open={createModalOpen}
+           onClose={() => setCreateModalOpen(false)}
+           onSubmit={handleCreateNewRow}
+         />
+       </StudentHero>
+     </>
+   );
+ };
+ 
+ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
+   const [values, setValues] = useState(() =>
+     columns.reduce((acc, column) => {
+       acc[column.accessorKey ?? ""] = "";
+       return acc;
+     }, {}),
+   );
+ 
+   const handleSubmit = () => {
+     onSubmit(values);
+     onClose();
+   };
+ 
+   return (
+     <Dialog open={open}>
+       <DialogTitle textAlign="center">Create New Account</DialogTitle>
+       <DialogContent>
+         <form onSubmit={(e) => e.preventDefault()}>
+           <Stack
+             sx={{
+               width: "100%",
+               minWidth: { xs: "300px", sm: "360px", md: "400px" },
+               gap: "1.5rem",
+             }}
+           >
+             {columns.map((column) => (
+               <TextField
+                 key={column.accessorKey}
+                 label={column.header || column.accessorKey}
+                 name={column.accessorKey}
+                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+               />
+             ))}
+           </Stack>
+         </form>
+       </DialogContent>
+       <DialogActions sx={{ p: "1.25rem" }}>
+         <Button onClick={onClose}>Cancel</Button>
+         <Button 
+          color="secondary" 
+          onClick={handleSubmit} 
+          variant="contained" 
+          style={{backgroundColor:"#FEAF00"}}
+         >
+           Create New Account
+         </Button>
+       </DialogActions>
+     </Dialog>
+   );
+ };
+ 
+ const validateRequired = (value) => !!value.length;
+ const validateEmail = (email) =>
+   !!email.length &&
+   email
+     .toLowerCase()
+     .match(
+       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+     );
+ const validateAge = (age) => age >= 18 && age <= 50;
+ 
+ export default EdiTable;
