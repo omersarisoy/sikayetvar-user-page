@@ -4,17 +4,13 @@
  import {
    Box,
    Button,
-   Dialog,
-   DialogActions,
-   DialogContent,
-   DialogTitle,
    IconButton,
    InputAdornment,
-   Stack,
-   TextField,
  } from "@mui/material";
  import { useCallback, useEffect, useMemo, useState } from "react";
 import { MaterialReactTable } from "material-react-table";
+import { CreateNewAccountModal } from "@/components/CreateNewAccountModal";
+import { validateAge, validateEmail, validateRequired } from "@/utils";
  
  const EdiTable = () => {
    const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -271,65 +267,6 @@ import { MaterialReactTable } from "material-react-table";
    );
  };
  
- export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
-   const [values, setValues] = useState(() =>
-     columns.reduce((acc, column) => {
-       acc[column.accessorKey ?? ""] = "";
-       return acc;
-     }, {}),
-   );
- 
-   const handleSubmit = () => {
-     onSubmit(values);
-     onClose();
-   };
- 
-   return (
-     <Dialog open={open}>
-       <DialogTitle textAlign="center">Create New Account</DialogTitle>
-       <DialogContent>
-         <form onSubmit={(e) => e.preventDefault()}>
-           <Stack
-             sx={{
-               width: "100%",
-               minWidth: { xs: "300px", sm: "360px", md: "400px" },
-               gap: "1.5rem",
-             }}
-           >
-             {columns.map((column) => (
-               <TextField
-                 key={column.accessorKey}
-                 label={column.header || column.accessorKey}
-                 name={column.accessorKey}
-                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
-               />
-             ))}
-           </Stack>
-         </form>
-       </DialogContent>
-       <DialogActions sx={{ p: "1.25rem" }}>
-         <Button onClick={onClose}>Cancel</Button>
-         <Button 
-          color="secondary" 
-          onClick={handleSubmit} 
-          variant="contained" 
-          style={{backgroundColor:"#FEAF00"}}
-         >
-           Create New Account
-         </Button>
-       </DialogActions>
-     </Dialog>
-   );
- };
- 
- const validateRequired = (value) => !!value.length;
- const validateEmail = (email) =>
-   !!email.length &&
-   email
-     .toLowerCase()
-     .match(
-       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-     );
- const validateAge = (age) => age >= 18 && age <= 50;
+
  
  export default EdiTable;

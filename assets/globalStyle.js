@@ -2,7 +2,7 @@
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-    html { 
+  html { 
     scroll-behavior: smooth; 
   }
   body {
@@ -31,7 +31,6 @@ const GlobalStyle = createGlobalStyle`
         color: #6C6C6C;
         margin: 0;
     }
-}
+  }
 `
-
 export default GlobalStyle

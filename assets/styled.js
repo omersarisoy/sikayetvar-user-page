@@ -12,7 +12,7 @@ const size = {
     laptop: '1024px',
     laptopL: '1440px',
     desktop: '2560px'
-  }
+}
 const device = {
     mobileS: `(max-width: ${size.mobileS})`,
     mobileM: `(max-width: ${size.mobileM})`,
@@ -22,7 +22,7 @@ const device = {
     laptopL: `(max-width: ${size.laptopL})`,
     desktop: `(max-width: ${size.desktop})`,
     desktopL: `(max-width: ${size.desktop})`
-  };
+};
 
 export const LoginPage = styled.div`
     height: 100vh;
@@ -31,7 +31,6 @@ export const LoginPage = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-
     .loginWrapper {
         width: 475px;
         height: 550px;
@@ -117,7 +116,6 @@ export const Sidebar = styled.div`
     width: 270px;
     background-color: #F2EAE1;
     padding: 24px 38px;
-
     h4{
         border-left: 4px solid #F8D442;
         padding-left: 8px;
@@ -131,7 +129,6 @@ export const Sidebar = styled.div`
         align-items: center;
         gap: 10px;
         margin-top: 50px;
-
         img {
             border-radius: 50%;
         }
@@ -145,14 +142,12 @@ export const Sidebar = styled.div`
             color: #FEAF00;
         }
     }
-
     .menuItems {
         display: flex;
         flex-direction: column;
         gap: 20px;
         margin-top: 100px;
     }
-
     .logout {
         position: absolute;
         bottom: 24px;
@@ -164,8 +159,8 @@ export const Sidebar = styled.div`
         align-items: center;
     }
     @media ${device.tablet} { 
-          display: none;
-        }
+        display: none;
+    }
 `
 
 export const CustomLink =  styled(Link)`
@@ -178,7 +173,6 @@ export const CustomLink =  styled(Link)`
     border-radius: 4px;
     color: #000000;
     padding: 12px 50px;
-
     &:hover, :focus {
         background-color: #FEAF00;
     }
@@ -205,7 +199,6 @@ export const Card = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
-
     p {
         color: ${props =>props.$color || '6C6C6C'}
     }
@@ -239,7 +232,6 @@ export const StudentHero = styled.div`
     top: 70px;
     padding: 0 30px;
     background-color: #F8F8F8;
-
     .MuiPaper-root {
         box-shadow: none;
 
@@ -263,7 +255,6 @@ export const StudentHero = styled.div`
                 position: relative;
                 display: flex;
                 align-items: center;
-
                 button {
                     position: absolute;
                     right: 0;
@@ -271,12 +262,10 @@ export const StudentHero = styled.div`
                     box-shadow: none;
                     border-radius: 4px;
                     padding: 10px 15px;
-
                 }
                 >div {
                     position: absolute;
                     right: 200px;
-
                     .MuiInputBase-root {
                         background-color: #FFFFFF;
                         border-radius: 8px;
@@ -304,6 +293,4 @@ export const StudentHero = styled.div`
             display: none;
         }
     }
-
-    
 `

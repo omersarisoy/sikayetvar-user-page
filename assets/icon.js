@@ -43,6 +43,7 @@ export const StudentsIcon = (props) => (
     />
   </svg>
 )
+
 export const PaymentIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -57,6 +58,7 @@ export const PaymentIcon = (props) => (
     />
   </svg>
 )
+
 export const ReportIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -71,6 +73,7 @@ export const ReportIcon = (props) => (
     />
   </svg>
 )
+
 export const SettingsIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -85,6 +88,7 @@ export const SettingsIcon = (props) => (
     />
   </svg>
 )
+
 export const LogoutIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -99,6 +103,7 @@ export const LogoutIcon = (props) => (
     />
   </svg>
 )
+
 export const SpeakerIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -113,6 +118,7 @@ export const SpeakerIcon = (props) => (
     />
   </svg>
 )
+
 export const BellIcon = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -127,6 +133,7 @@ export const BellIcon = (props) => (
     />
   </svg>
 )
+
 export const GraduationCap = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -141,6 +148,7 @@ export const GraduationCap = (props) => (
     />
   </svg>
 )
+
 export const Bookmark = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -155,6 +163,7 @@ export const Bookmark = (props) => (
     />
   </svg>
 )
+
 export const UsdSquare = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -169,6 +178,7 @@ export const UsdSquare = (props) => (
     />
   </svg>
 )
+
 export const Users = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -183,6 +193,7 @@ export const Users = (props) => (
     />
   </svg>
 )
+
 export const Magnify = (props) => (
     <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -197,6 +208,7 @@ export const Magnify = (props) => (
     />
   </svg>
 )
+
 export const Pencil = (props) => (
   <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -211,6 +223,7 @@ export const Pencil = (props) => (
   />
 </svg>
 )
+
 export const Trash = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
